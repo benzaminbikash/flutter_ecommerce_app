@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:frontend/constants/ToastMessage.dart';
 import 'package:frontend/constants/routes.dart';
 import 'package:frontend/model/productModel.dart';
 import 'package:frontend/provider/appProvider.dart';
-import 'package:frontend/screen/FavScreen.dart';
 import 'package:frontend/screen/buy_screen.dart';
 import 'package:frontend/screen/cartScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 class MyDetailProduct extends StatefulWidget {
   final PostsModal singleProduct;
@@ -26,13 +24,23 @@ class _MyDetailProductState extends State<MyDetailProduct> {
     return Scaffold(
       appBar: AppBar(actions: [
         if (productProvider.usermodel.roll != 'admin')
-          IconButton(
-              onPressed: () {
-                Routes.instance.push(MyCart(), context);
-              },
-              icon: Icon(Icons.shopping_cart
-                  //
-                  )),
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: IconButton(
+                onPressed: () {
+                  Routes.instance.push(MyCart(), context);
+                },
+                icon: badges.Badge(
+                  badgeContent: Text(
+                    productProvider.getCartProduct.length > 0
+                        ? productProvider.getCartProduct.length.toString()
+                        : '0',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  child: Icon(Icons.shopping_cart),
+                )),
+          ),
       ]),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
@@ -79,7 +87,7 @@ class _MyDetailProductState extends State<MyDetailProduct> {
             ),
             Container(
               width: double.infinity,
-              height: 240,
+              height: 260,
               child: Text(
                 widget.singleProduct.description.toString(),
                 style: TextStyle(
@@ -88,8 +96,7 @@ class _MyDetailProductState extends State<MyDetailProduct> {
                     color: Colors.black),
               ),
             ),
-            SizedBox(height: 10),
-            SizedBox(height: 10),
+            SizedBox(height: 28),
             if (productProvider.usermodel.roll != 'admin')
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

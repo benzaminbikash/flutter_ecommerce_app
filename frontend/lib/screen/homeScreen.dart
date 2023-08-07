@@ -26,6 +26,7 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> {
   List<CategoryModel> listcategoryproduct = [];
   List<PostsModal> productlistdata = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -36,144 +37,196 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   void getApi() async {
+    setState(() {
+      isLoading = true;
+    });
     listcategoryproduct = await FirebaseApi.instance.getCategories();
     productlistdata = await FirebaseApi.instance.getBestProduct();
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
+
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        leading: Icon(Icons.notes),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              radius: 12,
+              backgroundColor: Colors.black,
+              child: Text(
+                appProvider.usermodel.name!.substring(0, 1),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10),
-                child: MyHeader(
-                  title: 'Mobile E-commerce',
-                  subtitle: '',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'search...',
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Categories',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 8),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: listcategoryproduct
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: InkWell(
-                                onTap: () {
-                                  Routes.instance.push(
-                                      MyCategoryPage(categoryModel: e),
-                                      context);
-                                },
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 15,
-                                  child: SizedBox(
-                                    width: 80,
-                                    height: 80,
-                                    child: Image.network(
-                                      e.image.toString(),
-                                      width: 50,
-                                      height: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList())),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'All Products',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              // MyBestProduct()
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: GridView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5),
-                  itemBuilder: (context, index) {
-                    PostsModal product = productlistdata[index];
-                    return Card(
-                      elevation: 29,
-                      child: Column(
-                        children: [
-                          Image.network(
-                            product.image.toString(),
-                            width: 120,
-                            height: 120,
-                          ),
-                          Text(
-                            product.title.toString(),
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Price'),
-                              SizedBox(width: 6),
-                              Text('Rs'),
-                              SizedBox(width: 1),
-                              Text(product.price.toString())
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          OutlinedButton(
-                              onPressed: () {
-                                Routes.instance.push(
-                                    MyDetailProduct(
-                                      singleProduct: product,
-                                    ),
-                                    context);
-                              },
-                              child: Text('Buy'),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    width: 1.7,
-                                    color: Colors.black,
-                                  ),
-                                  foregroundColor: Colors.black,
-                                  fixedSize: Size(100, 30)))
-                        ],
+          child: isLoading
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                      CircularProgressIndicator(
+                        color: Colors.black,
+                        strokeWidth: 1,
                       ),
-                    );
-                  },
-                  itemCount: productlistdata.length,
+                    ])
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        'Best Mobile \nin your hand.',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 250, 249, 249),
+                        ),
+                        width: double.infinity,
+                        height: 55,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search_sharp),
+                            hintText: 'Search',
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Categories',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                            children: listcategoryproduct
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Routes.instance.push(
+                                            MyCategoryPage(categoryModel: e),
+                                            context);
+                                      },
+                                      child: Card(
+                                        color: Colors.white,
+                                        elevation: 15,
+                                        child: SizedBox(
+                                          width: 80,
+                                          height: 80,
+                                          child: Image.network(
+                                            e.image.toString(),
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList())),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        'All Products',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    // MyBestProduct()
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: GridView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.8,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5),
+                        itemBuilder: (context, index) {
+                          PostsModal product = productlistdata[index];
+                          return Card(
+                            elevation: 29,
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  product.image.toString(),
+                                  width: 120,
+                                  height: 120,
+                                ),
+                                Text(
+                                  product.title.toString(),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Price'),
+                                    SizedBox(width: 6),
+                                    Text('Rs'),
+                                    SizedBox(width: 1),
+                                    Text(product.price.toString())
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                OutlinedButton(
+                                    onPressed: () {
+                                      Routes.instance.push(
+                                          MyDetailProduct(
+                                            singleProduct: product,
+                                          ),
+                                          context);
+                                    },
+                                    child: Text('Buy'),
+                                    style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          width: 1.7,
+                                          color: Colors.black,
+                                        ),
+                                        foregroundColor: Colors.black,
+                                        fixedSize: Size(100, 30)))
+                              ],
+                            ),
+                          );
+                        },
+                        itemCount: productlistdata.length,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

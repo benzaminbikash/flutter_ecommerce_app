@@ -21,8 +21,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
             height: 60,
             inactiveColor: Colors.grey,
             items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'User'),
+              BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
             ]),
         tabBuilder: (context, index) {
           switch (index) {
