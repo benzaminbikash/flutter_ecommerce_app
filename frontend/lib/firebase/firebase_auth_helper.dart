@@ -52,10 +52,6 @@ class firebaseAuthHelper {
 
   void logoutuser(BuildContext context) async {
     await _auth.signOut();
-    // Routes.instance.pushAndRemoveUtil(WelcomeScreen(), context);
-    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-    //   return WelcomeScreen();
-    // }));
     Navigator.of(context, rootNavigator: true).pushReplacement(
         MaterialPageRoute(builder: (context) => WelcomeScreen()));
   }

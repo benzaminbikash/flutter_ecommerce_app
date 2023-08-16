@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/ToastMessage.dart';
 import 'package:frontend/model/Categories%20Model.dart';
+import 'package:frontend/model/OrderModel.dart';
 import 'package:frontend/model/productModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frontend/model/userModel.dart';
@@ -135,5 +136,55 @@ class FirebaseApi {
     final taskSnapshot = await FirebaseStorage.instance.ref(id).putFile(image);
     String imageUrl = await taskSnapshot.ref.getDownloadURL();
     return imageUrl;
+  }
+
+  Future<bool> userOrderProduct(List<PostsModal> list, String payment) async {
+    try {
+      DocumentReference reference = FirebaseFirestore.instance
+          .collection("userOrder")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('order')
+          .doc();
+      // DocumentReference admin = FirebaseFirestore.instance
+      //     .collection("userOrder")
+      //     .doc(FirebaseAuth.instance.currentUser!.uid)
+      //     .collection('order')
+      //     .doc();
+      // admin.set({
+      //   "id": reference.id,
+      //   "product": list.map((e) => e.toJson()),
+      //   "status": "pending",
+      //   "payment": payment
+      // });
+      reference.set({
+        "id": reference.id,
+        "product": list.map((e) => e.toJson()),
+        "status": "pending",
+        "payment": payment
+      });
+      print('working ${payment}');
+      utils().showToast("Order Successfully");
+      return true;
+    } catch (e) {
+      utils().showToast(e.toString());
+      print('not working');
+
+      return false;
+    }
+  }
+
+  Future<List<OrderModel>> getUserOrderList() async {
+    try {
+      final reference = await FirebaseFirestore.instance
+          .collection('userOrder')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('order')
+          .get();
+      final data =
+          reference.docs.map((e) => OrderModel.fromJson(e.data())).toList();
+      return data;
+    } catch (e) {
+      throw Exception('Error In Order Fetch');
+    }
   }
 }

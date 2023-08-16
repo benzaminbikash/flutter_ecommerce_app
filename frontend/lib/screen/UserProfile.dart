@@ -77,38 +77,68 @@ class _MyUserProfileState extends State<MyUserProfile> {
                 onTap: () {
                   Routes.instance.push(MyCart(), context);
                 },
-                leading: Icon(Icons.shopping_cart),
-                title: Text('My Cart'),
+                leading: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'My Cart',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ListTile(
               onTap: () {
                 Routes.instance.push(FavScreenProduct(), context);
               },
-              leading: Icon(Icons.favorite),
-              title: Text('Favorite'),
+              leading: Icon(
+                Icons.favorite,
+                color: Colors.black,
+              ),
+              title: Text(
+                'Favorite',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
             if (appProvider.usermodel.roll != 'admin')
               ListTile(
                 onTap: () {
                   Routes.instance.push(OrderScreen(), context);
                 },
-                leading: Icon(Icons.online_prediction),
-                title: Text('My Order'),
+                leading: Icon(
+                  Icons.online_prediction,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'My Order',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             if (appProvider.usermodel.roll == "admin")
               ListTile(
                 onTap: () {
                   Routes.instance.push(MyDashBoard(), context);
                 },
-                leading: Icon(Icons.dashboard),
-                title: Text('Dashboard'),
+                leading: Icon(
+                  Icons.dashboard,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'Dashboard',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ListTile(
               onTap: () {
                 firebaseAuthHelper.instance.logoutuser(context);
               },
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
+              leading: Icon(
+                Icons.logout,
+                color: Colors.black,
+              ),
+              title: Text(
+                'Logout',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),

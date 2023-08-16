@@ -1,15 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:frontend/auth_screen/loginScreen.dart';
 import 'package:frontend/constants/routes.dart';
 import 'package:frontend/provider/appProvider.dart';
 import 'package:frontend/screen/productDetailScreen.dart';
-import 'package:frontend/screen/welcomeScreen.dart';
-import 'package:frontend/widgets/bottomWidget.dart';
-import 'package:frontend/widgets/commonheader.dart';
 import '../firebase/firebase_api.dart';
 import '../model/Categories Model.dart';
 import '../model/productModel.dart';
@@ -49,8 +41,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -61,12 +51,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             child: CircleAvatar(
               radius: 12,
               backgroundColor: Colors.black,
-              child: Text(
-                appProvider.usermodel.name!.substring(0, 1),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold),
+              child: Icon(
+                Icons.person,
+                size: 17,
               ),
             ),
           )
@@ -75,15 +62,17 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: isLoading
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                      CircularProgressIndicator(
-                        color: Colors.black,
-                        strokeWidth: 1,
-                      ),
-                    ])
+              ? Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.black,
+                          strokeWidth: 1,
+                        ),
+                      ]),
+                )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -194,14 +183,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Price'),
-                                    SizedBox(width: 6),
                                     Text('Rs'),
                                     SizedBox(width: 1),
                                     Text(product.price.toString())
                                   ],
                                 ),
-                                SizedBox(height: 5),
+                                // SizedBox(height: 5),
                                 OutlinedButton(
                                     onPressed: () {
                                       Routes.instance.push(
@@ -210,11 +197,11 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                                           ),
                                           context);
                                     },
-                                    child: Text('Buy'),
+                                    child: Text('Buy Now'),
                                     style: OutlinedButton.styleFrom(
                                         side: BorderSide(
-                                          width: 1.7,
-                                          color: Colors.black,
+                                          // width: 1,
+                                          color: Colors.transparent,
                                         ),
                                         foregroundColor: Colors.black,
                                         fixedSize: Size(100, 30)))

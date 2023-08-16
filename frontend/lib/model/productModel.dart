@@ -59,4 +59,3 @@ class PostsModal {
         qty: qty ?? this.qty);
   }
 }
-//3:9
