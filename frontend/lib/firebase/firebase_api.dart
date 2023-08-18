@@ -145,17 +145,7 @@ class FirebaseApi {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('order')
           .doc();
-      // DocumentReference admin = FirebaseFirestore.instance
-      //     .collection("userOrder")
-      //     .doc(FirebaseAuth.instance.currentUser!.uid)
-      //     .collection('order')
-      //     .doc();
-      // admin.set({
-      //   "id": reference.id,
-      //   "product": list.map((e) => e.toJson()),
-      //   "status": "pending",
-      //   "payment": payment
-      // });
+
       reference.set({
         "id": reference.id,
         "product": list.map((e) => e.toJson()),
@@ -185,6 +175,39 @@ class FirebaseApi {
       return data;
     } catch (e) {
       throw Exception('Error In Order Fetch');
+    }
+  }
+
+  Future<List<OrderModel>> getAllOrderProduct() async {
+    try {
+      final reference =
+          await FirebaseFirestore.instance.collectionGroup('order').get();
+      final data =
+          reference.docs.map((e) => OrderModel.fromJson(e.data())).toList();
+      return data;
+    } catch (e) {
+      throw Exception('Error In Order Fetch');
+    }
+  }
+
+  Future<String> updateOrder(OrderModel orderModel) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collectionGroup('order')
+          .where('id', isEqualTo: orderModel.id)
+          .get();
+      if (snapshot.size > 0) {
+        final documentRef = snapshot.docs[0].reference;
+        await documentRef.update(orderModel.toJson());
+        debugPrint('update it');
+        return 'update Successfully';
+      } else {
+        debugPrint('id not found');
+        return 'Document with ID not found';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return e.toString();
     }
   }
 }

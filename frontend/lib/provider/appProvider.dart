@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/ToastMessage.dart';
 import 'package:frontend/firebase/firebase_api.dart';
 import 'package:frontend/model/Categories%20Model.dart';
+import 'package:frontend/model/OrderModel.dart';
 import 'package:frontend/model/productModel.dart';
 import 'package:frontend/model/userModel.dart';
 
@@ -83,6 +84,7 @@ class AppProvider with ChangeNotifier {
   Future<void> callBack() async {
     await get_dashCategory();
     await get_dashProduct();
+    await getAllOrder();
   }
 
   Future<void> deleteProduct(PostsModal postsModal) async {
@@ -112,6 +114,20 @@ class AppProvider with ChangeNotifier {
     PostsModal postsModal = await FirebaseApi.instance
         .addProduct(image, title, description, price, categoryId);
     _dashProduct.add(postsModal);
+    notifyListeners();
+  }
+
+  List<OrderModel> _orderAllProduct = [];
+  List<OrderModel> get orderAllProduct => _orderAllProduct;
+
+  Future<void> getAllOrder() async {
+    _orderAllProduct = await FirebaseApi.instance.getAllOrderProduct();
+    notifyListeners();
+  }
+
+  Future<void> updateOrderStatus(int index, OrderModel orderModel) async {
+    await FirebaseApi.instance.updateOrder(orderModel);
+    _orderAllProduct[index] = orderModel;
     notifyListeners();
   }
 }

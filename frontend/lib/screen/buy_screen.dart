@@ -62,7 +62,7 @@ class _BuyScreenState extends State<BuyScreen> {
             child: MyCustomButton(
               title: "Order",
               voidCallback: () async {
-                if (_paymentMethod == 'delivery') {
+                if (_paymentMethod == 'cash on delivery') {
                   productProvider.buyProduct.clear();
                   productProvider.addBuy(widget.singleProduct);
                   bool value = await FirebaseApi.instance.userOrderProduct(

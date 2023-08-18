@@ -143,46 +143,6 @@ class _EditProductState extends State<EditProduct> {
                 },
               ),
             )
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: MyCustomButton(
-            //     title: "Update",
-            //     voidCallback: () async {
-            //       if (image == null &&
-            //           title.text.isEmpty &&
-            //           description.text.isEmpty &&
-            //           price.text.isEmpty) {
-            //         Navigator.pop(context);
-            //       } else if (image != null) {
-            //         String imageUrl =
-            //             await FirebaseApi.instance.uploadUserImage(
-            //           widget.postsModal.id.toString(),
-            //           image!,
-            //         );
-            //         PostsModal product = widget.postsModal.copyWith(
-            //           description:
-            //               description.text.isEmpty ? null : description.text,
-            //           image: imageUrl,
-            //           title: title.text.isEmpty ? null : title.text,
-            //           price: price.text.isEmpty ? null : price.text,
-            //         );
-            //         appProvider.updateProduct(widget.index,
-            //             product); // Use 'product' instead of 'widget.postsModal'
-            //         utils().showToast("Update Successfully!");
-            //       } else {
-            //         PostsModal product = widget.postsModal.copyWith(
-            //           description:
-            //               description.text.isEmpty ? null : description.text,
-            //           title: title.text.isEmpty ? null : title.text,
-            //           price: price.text.isEmpty ? null : price.text,
-            //         );
-            //         appProvider.updateProduct(widget.index,
-            //             product); // Use 'product' instead of 'widget.postsModal'
-            //         utils().showToast("Update Successfully!");
-            //       }
-            //     },
-            //   ),
-            // ),
           ],
         ));
   }

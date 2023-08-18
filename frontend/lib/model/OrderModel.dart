@@ -22,4 +22,12 @@ class OrderModel {
         payment: json["payment"],
         product: productlist.map((e) => PostsModal.fromJson(e)).toList());
   }
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "status": status,
+      "payment": payment,
+      "product": product.map((e) => e.toJson()).toList(),
+    };
+  }
 }
